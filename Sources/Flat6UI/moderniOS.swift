@@ -9,8 +9,10 @@ public class Flat6UINavigationController: UINavigationController {
     public init(rootVC: UIViewController) {
         super.init(nibName: nil, bundle: nil)
         self.viewControllers = [rootVC]
-        self.moderniOSNavBar()
-        self.navigationItem.rightBarButtonItem = .flat6Item(title: "Done", target: self, action: #selector(backTapped))
+        if #unavailable(iOS 7.0.1) {
+            self.moderniOSNavBar()
+            self.navigationItem.rightBarButtonItem = .flat6Item(title: "Done", target: self, action: #selector(backTapped))
+        }
     }
     
     required init?(coder: NSCoder) {
