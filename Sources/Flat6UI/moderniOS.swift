@@ -10,10 +10,15 @@ public class Flat6UINavigationController: UINavigationController {
         super.init(nibName: nil, bundle: nil)
         self.viewControllers = [rootVC]
         self.moderniOSNavBar()
+        self.navigationItem.rightBarButtonItem = .flat6Item(title: "Done", target: self, action: #selector(backTapped))
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    @objc func backTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -82,5 +87,24 @@ extension UIWindow {
             self.addSubview(statusBar)
             self.bringSubviewToFront(statusBar)
         }
+    }
+}
+
+
+public extension UIBarButtonItem {
+    static func flat6Item(title: String,
+                          target: Any?,
+                          action: Selector,
+                          tintColor: UIColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)) -> UIBarButtonItem {
+        
+        let button = UIButton(type: .custom)
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(tintColor, for: .normal)
+        button.setTitleColor(tintColor.withAlphaComponent(0.5), for: .highlighted)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        button.addTarget(target, action: action, for: .touchUpInside)
+        
+        return UIBarButtonItem(customView: button)
     }
 }
