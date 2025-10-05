@@ -15,10 +15,9 @@ public class Flat6NavigationBar: UINavigationBar {
     override public func layoutSubviews() {
         super.layoutSubviews()
         
-        if #unavailable(iOS 7.0.1) {
+        if #unavailable(iOS 20.0.1) {
             var frame = self.frame
             frame.origin.y = 20 // push below custom status bar
-            frame.size.height = 44
             self.frame = frame
         }
     }
@@ -55,7 +54,7 @@ public class Flat6UIWindow: UIWindow {
 
 extension UINavigationController {
     fileprivate func moderniOSNavBar() {
-        if #unavailable(iOS 7.0.1) {
+        if #unavailable(iOS 20.0.1) {
             self.navigationBar.backgroundColor = .white
             self.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.navigationBar.shadowImage = UIImage()
@@ -66,7 +65,7 @@ extension UINavigationController {
 
 extension UIWindow {
     fileprivate func moderniOSStatusBar(backgroundColor: UIColor = .white) {
-        if #unavailable(iOS 7.0.1) {
+        if #unavailable(iOS 20.0.1) {
             let statusBar = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 20))
             statusBar.backgroundColor = backgroundColor
             statusBar.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
