@@ -6,7 +6,14 @@ import UIKitExtensions
 public class Flat6UIViewController: UIViewController { }
 
 public class Flat6UINavigationController: UINavigationController {
-    
+    public init(rootVC: UIViewController) {
+        super.init(rootViewController: rootVC)
+        self.moderniOSNavBar()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
 }
 
 public class Flat6UIWindow: UIWindow {
