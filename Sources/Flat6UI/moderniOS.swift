@@ -11,7 +11,7 @@ public class Flat6UINavigationController: UINavigationController {
         self.viewControllers = [rootVC]
         if #unavailable(iOS 7.0.1) {
             self.moderniOSNavBar()
-            self.navigationItem.rightBarButtonItem = .flat6Item(title: "Done", target: self, action: #selector(backTapped))
+            injectDoneButton(into: rootVC)
         }
     }
     
@@ -19,9 +19,26 @@ public class Flat6UINavigationController: UINavigationController {
         super.init(coder: coder)
     }
     
-    @objc func backTapped() {
-        navigationController?.popViewController(animated: true)
+    private func injectDoneButton(into viewController: UIViewController) {
+        viewController.navigationItem.rightBarButtonItem = .flat6Item(
+            title: "Done",
+            target: self,
+            action: #selector(backTapped)
+        )
     }
+    
+    public override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        if #unavailable(iOS 7.0.1) {
+            injectDoneButton(into: viewController)
+        }
+        super.pushViewController(viewController, animated: animated)
+    }
+    
+    @objc private func backTapped() {
+        self.popViewController(animated: true)
+    }
+    
+    
 }
 
 public class Flat6UIWindow: UIWindow {
