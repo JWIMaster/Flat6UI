@@ -3,23 +3,12 @@ import UIKit
 import UIKitCompatKit
 import UIKitExtensions
 
-public class Flat6NavigationBar: UINavigationBar {
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        if #unavailable(iOS 7.0.1) {
-            var frame = self.frame
-            frame.origin.y = 20 // push below custom status bar
-            self.frame = frame
-        }
-    }
-}
-
 public class Flat6UIViewController: UIViewController { }
 
 public class Flat6UINavigationController: UINavigationController {
     public override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        self.moderniOSNavBar()
+        //self.moderniOSNavBar()
     }
 
     required init?(coder: NSCoder) {
