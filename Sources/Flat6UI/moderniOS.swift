@@ -51,7 +51,7 @@ extension UINavigationController {
 }
 
 extension UIWindow {
-    fileprivate func moderniOSStatusBar(backgroundColor: UIColor = .white) {
+    public func moderniOSStatusBar(backgroundColor: UIColor = .white) {
         if #unavailable(iOS 7.0.1) {
             let statusBar = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 20))
             statusBar.backgroundColor = backgroundColor
