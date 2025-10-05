@@ -18,8 +18,8 @@ public class Flat6UIViewController: UIViewController { }
 
 public class Flat6UINavigationController: UINavigationController {
     public override init(rootViewController: UIViewController) {
-        super.init(navigationBarClass: Flat6NavigationBar.self, toolbarClass: nil)
-        self.viewControllers = [rootViewController]
+        super.init(rootViewController: rootViewController)
+        self.moderniOSNavBar()
     }
 
     required init?(coder: NSCoder) {
