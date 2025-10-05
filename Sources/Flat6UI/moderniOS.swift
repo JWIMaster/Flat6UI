@@ -11,7 +11,7 @@ public class Flat6UINavigationController: UINavigationController {
         self.viewControllers = [rootVC]
         self.moderniOSNavBar()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -22,10 +22,20 @@ public class Flat6UIWindow: UIWindow {
         super.init(frame: frame)
         self.moderniOSStatusBar()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.moderniOSStatusBar()
+    }
+    
+    private var statusBarAdded = false
+    
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if !statusBarAdded {
+            self.moderniOSStatusBar()
+            statusBarAdded = true
+        }
     }
 }
 
@@ -46,29 +56,29 @@ extension UIWindow {
             let statusBar = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 20))
             statusBar.backgroundColor = backgroundColor
             statusBar.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-
+            
             let timeLabel = UILabel()
             timeLabel.textAlignment = .center
             timeLabel.textColor = .black
             timeLabel.backgroundColor = .clear
             timeLabel.font = UIFont.systemFont(ofSize: 12.5, weight: .bold)
             timeLabel.translatesAutoresizingMaskIntoConstraints = false
-
+            
             let timeFormatter = DateFormatter()
             timeFormatter.dateFormat = "h:mm a"
             timeLabel.text = timeFormatter.string(from: Date())
-
+            
             Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
                 timeLabel.text = timeFormatter.string(from: Date())
             }
-
+            
             statusBar.addSubview(timeLabel)
-
+            
             NSLayoutConstraint.activate([
                 timeLabel.centerXAnchor.constraint(equalTo: statusBar.centerXAnchor),
                 timeLabel.centerYAnchor.constraint(equalTo: statusBar.centerYAnchor)
             ])
-
+            
             self.addSubview(statusBar)
             self.bringSubviewToFront(statusBar)
         }
