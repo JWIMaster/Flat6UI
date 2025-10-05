@@ -7,7 +7,8 @@ public class Flat6UIViewController: UIViewController { }
 
 public class Flat6UINavigationController: UINavigationController {
     public init(rootVC: UIViewController) {
-        super.init(rootViewController: rootVC)
+        super.init(nibName: nil, bundle: nil)
+        self.viewControllers = [rootVC]
         self.moderniOSNavBar()
     }
 
