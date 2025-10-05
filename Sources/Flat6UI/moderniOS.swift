@@ -8,9 +8,53 @@
 import Foundation
 import UIKit
 import UIKitCompatKit
+import UIKitExtensions
+
+
+public class Flat6NavigationBar: UINavigationBar {
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if #unavailable(iOS 7.0.1) {
+            var frame = self.frame
+            frame.origin.y = 20 // push below custom status bar
+            frame.size.height = 44
+            self.frame = frame
+        }
+    }
+}
+
+
+public class Flat6UIViewController: UIViewController {
+    
+}
+
+public class Flat6UINavigationController: UINavigationController {
+    public override init(rootViewController: UIViewController) {
+        super.init(navigationBarClass: Flat6NavigationBar.self, toolbarClass: nil)
+        self.viewControllers = [rootViewController]
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+public class Flat6UIWindow: UIWindow {
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.moderniOSStatusBar()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 
 extension UINavigationController {
-    public func moderniOSNavBar() {
+    fileprivate func moderniOSNavBar() {
         if #unavailable(iOS 7.0.1) {
             self.navigationBar.backgroundColor = .white
             self.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -21,7 +65,7 @@ extension UINavigationController {
 }
 
 extension UIWindow {
-    public func moderniOSStatusBar(backgroundColor: UIColor = .white) {
+    fileprivate func moderniOSStatusBar(backgroundColor: UIColor = .white) {
         if #unavailable(iOS 7.0.1) {
             let statusBar = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 20))
             statusBar.backgroundColor = backgroundColor
