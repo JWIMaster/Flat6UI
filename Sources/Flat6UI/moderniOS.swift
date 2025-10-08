@@ -3,12 +3,13 @@ import UIKit
 import UIKitCompatKit
 import UIKitExtensions
 
+
 public extension UIViewController {
 
     var unifiedTitle: String? {
         get {
             // On iOS 7+, just use the normal title
-            if #available(iOS 7.0.1, *) {
+            if #available(iOS 6.2, *) {
                 return self.title
             } else {
                 // On iOS 6, try to read from the navigationItem.titleView if it's a UILabel
@@ -19,7 +20,7 @@ public extension UIViewController {
             }
         }
         set {
-            if #available(iOS 7.0.1, *) {
+            if #available(iOS 6.2, *) {
                 self.title = newValue
             } else {
                 // Create a UILabel for the titleView on iOS 6
@@ -34,5 +35,6 @@ public extension UIViewController {
             }
         }
     }
+
 }
 
