@@ -3,127 +3,36 @@ import UIKit
 import UIKitCompatKit
 import UIKitExtensions
 
-public class Flat6UIViewController: UIViewController { }
+public extension UIViewController {
 
-public class Flat6UINavigationController: UINavigationController {
-    public init(rootVC: UIViewController) {
-        super.init(nibName: nil, bundle: nil)
-        self.viewControllers = [rootVC]
-        if #unavailable(iOS 7.0.1) {
-            self.moderniOSNavBar()
-            injectDoneButton(into: rootVC)
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    private func injectDoneButton(into viewController: UIViewController) {
-        viewController.navigationItem.rightBarButtonItem = .flat6Item(
-            title: "Done",
-            target: self,
-            action: #selector(backTapped)
-        )
-    }
-    
-    public override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        if #unavailable(iOS 7.0.1) {
-            injectDoneButton(into: viewController)
-        }
-        super.pushViewController(viewController, animated: animated)
-    }
-    
-    @objc private func backTapped() {
-        self.popViewController(animated: true)
-    }
-    
-    
-}
-
-public class Flat6UIWindow: UIWindow {
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.moderniOSStatusBar()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.moderniOSStatusBar()
-    }
-    
-    private var statusBarAdded = false
-    
-    public override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if !statusBarAdded {
-            self.moderniOSStatusBar()
-            statusBarAdded = true
-        }
-    }
-}
-
-extension UINavigationController {
-    fileprivate func moderniOSNavBar() {
-        if #unavailable(iOS 7.0.1) {
-            self.navigationBar.backgroundColor = .white
-            self.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.navigationBar.shadowImage = UIImage()
-            self.navigationBar.tintColor = .white
-        }
-    }
-}
-
-extension UIWindow {
-    public func moderniOSStatusBar(backgroundColor: UIColor = .white) {
-        if #unavailable(iOS 7.0.1) {
-            let statusBar = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 20))
-            statusBar.backgroundColor = backgroundColor
-            statusBar.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-            
-            let timeLabel = UILabel()
-            timeLabel.textAlignment = .center
-            timeLabel.textColor = .black
-            timeLabel.backgroundColor = .clear
-            timeLabel.font = UIFont.systemFont(ofSize: 12.5, weight: .bold)
-            timeLabel.translatesAutoresizingMaskIntoConstraints = false
-            
-            let timeFormatter = DateFormatter()
-            timeFormatter.dateFormat = "h:mm a"
-            timeLabel.text = timeFormatter.string(from: Date())
-            
-            Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
-                timeLabel.text = timeFormatter.string(from: Date())
+    var unifiedTitle: String? {
+        get {
+            // On iOS 7+, just use the normal title
+            if #available(iOS 7.0.1, *) {
+                return self.title
+            } else {
+                // On iOS 6, try to read from the navigationItem.titleView if it's a UILabel
+                if let label = self.navigationItem.titleView as? UILabel {
+                    return label.text
+                }
+                return nil
             }
-            
-            statusBar.addSubview(timeLabel)
-            
-            NSLayoutConstraint.activate([
-                timeLabel.centerXAnchor.constraint(equalTo: statusBar.centerXAnchor),
-                timeLabel.centerYAnchor.constraint(equalTo: statusBar.centerYAnchor)
-            ])
-            
-            self.addSubview(statusBar)
-            self.bringSubviewToFront(statusBar)
+        }
+        set {
+            if #available(iOS 7.0.1, *) {
+                self.title = newValue
+            } else {
+                // Create a UILabel for the titleView on iOS 6
+                let titleView = UILabel()
+                titleView.text = newValue
+                titleView.font = .boldSystemFont(ofSize: 17)
+                titleView.backgroundColor = .clear
+                titleView.textColor = .black
+                titleView.textAlignment = .center
+                titleView.sizeToFit()
+                self.navigationItem.titleView = titleView
+            }
         }
     }
 }
 
-
-public extension UIBarButtonItem {
-    static func flat6Item(title: String,
-                          target: Any?,
-                          action: Selector,
-                          tintColor: UIColor = UIColor(red: 0/255, green: 122/255, blue: 255/255, alpha: 1)) -> UIBarButtonItem {
-        
-        let button = UIButton(type: .custom)
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(tintColor, for: .normal)
-        button.setTitleColor(tintColor.withAlphaComponent(0.5), for: .highlighted)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        button.addTarget(target, action: action, for: .touchUpInside)
-        
-        return UIBarButtonItem(customView: button)
-    }
-}
