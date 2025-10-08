@@ -25,7 +25,7 @@ public extension UIViewController {
             } else {
                 // Create a UILabel for the titleView on iOS 6
                 let titleView = UILabel()
-                titleView.text = newValue
+                titleView.text = "iOS 6.2 is not here?"
                 titleView.font = .boldSystemFont(ofSize: 17)
                 titleView.backgroundColor = .clear
                 titleView.textColor = .black
